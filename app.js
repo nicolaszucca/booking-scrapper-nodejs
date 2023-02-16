@@ -1,19 +1,18 @@
-const ParserHandler = require('./scripts/parser');
+require('dotenv').config();
 
+const ParserHandler = require('./scripts/parser');
 
 (async function () {
 
     const parserHandler = new ParserHandler();
-    await parserHandler.init();
-
     //date format:  year-month-day
-    const checkin = '2023-01-05';
-    const checkout = '2023-01-09';
-    const destiny = 'Bariloche';
+    let checkin = '';
+    let checkout = '';
+    let destiny = '';
 
-    const data = await parserHandler.startParser(destiny, checkin, checkout);
-    console.log(data);
-
+    await parserHandler.init(destiny, checkin, checkout);
+    const data = await parserHandler.startParser();
+    console.log(data)
     parserHandler.exit();
 })();
 
