@@ -17,26 +17,29 @@ class HousePageParser {
             let linksDepartamentViews = 0;
             const title = document.querySelector('.pp-header__title').textContent;
             const address = document.querySelector('.hp_address_subtitle').innerText;
-            const roomsTr = Array.from(document.querySelectorAll('tbody')[4].querySelectorAll('tr')).filter(e => e.children.length > 4);
+            const roomsTr = Array.from(document.querySelectorAll('tbody')[2].querySelectorAll('tr')).filter(e => e.children.length > 4);
 
-
-            function getPictures() {
-                document.querySelectorAll('.bh-photo-grid-thumb-more-inner-2')[0].click();
+            /* function getPictures() {
+                document.querySelectorAll('.bh-photo-grid-thumb-more-inner-2')[0].click();TODO: a veces no existe el click() 
                 return Array.from(document.querySelectorAll('.bh-photo-modal-masonry-grid-item > a')).map(e => e.href)
-            };
+            }; */
 
             function getGeneralFacilities() {
-                let allFacilities = document.querySelectorAll('.hp_desc_important_facilities')[0]; //div
-                return Array.from(allFacilities.querySelectorAll('.important_facility')).map(e => e.innerText.trim());
+                const allFacilities = document.querySelectorAll('.e5e0727360')[0]; //div
+                if (!allFacilities) {
+                    return [];
+                }
+                return Array.from(allFacilities.querySelectorAll('span.db312485ba')).map(e => e.innerText.trim())
             };
+
 
 
             function getRoom(room) {
                 // const url = window.location.href;
                 const title = room.querySelector('.hprt-roomtype-icon-link').innerText;
-                const numberTxt = room.querySelector('.prco-valign-middle-helper').innerText;
-                const price = new Intl.NumberFormat('es-ar', { style: 'currency', currency: 'ARS', maximumSignificantDigits: 7 }).format(numberTxt);
-                const capacity = room.querySelectorAll('.c-occupancy-icons__adults > i').length;
+                const numberStr = room.querySelector('.prco-valign-middle-helper').innerText.replace('$', "").trim();
+                const price = new Intl.NumberFormat('es-ar', { style: 'currency', currency: 'ARS', maximumSignificantDigits: 7 }).format(numberStr);
+                const capacity = room.querySelectorAll('.c-occupancy-icons__adults > i').length;//TODO: +5 personas se muestra: 1icon x n
                 const characteristics = Array.from(room.querySelectorAll('.bui-badge--outline')).map(e => e.textContent);
                 const facilities = Array.from(room.querySelectorAll('.other_facility_badge--default_color')).map(e => e.textContent);
 
@@ -93,7 +96,7 @@ class HousePageParser {
                 ratings: getRatings(),
                 pets: allowsPets(),
                 views: views(),
-                pictures: getPictures(),
+                //pictures: getPictures(),
             }
         })
     }
